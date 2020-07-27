@@ -1,3 +1,4 @@
+from __future__ import print_function
 import numpy as np
 import theano
 import mner.optimizer
@@ -140,8 +141,8 @@ lbfgs = 30
 # set up the optimizer and solve
 if demo_type == 1:
     # find a local minimum of the training set
-    print "Demo 1: find a local minimum on the training set."
-    print ""
+    print("Demo 1: find a local minimum on the training set.")
+    print("")
 
     opt = mner.optimizer.Optimizer(y, s, rank, cetype=cetype, rtype=[], solver=solver, datasets=datasets, fscale=fscale, csigns=csigns, lbfgs=lbfgs, precompile=True, compute_hess=False, verbosity=2, iprint=1, factr=factr, float_dtype=float_dtype)
 
@@ -150,8 +151,8 @@ if demo_type == 1:
 
 elif demo_type == 2:
     # attempt to find the global minimum of the training set
-    print "Demo 2: attempt to find a global minimum on the training set (heuristic)."
-    print ""
+    print("Demo 2: attempt to find a global minimum on the training set (heuristic).")
+    print("")
 
     global_solver = mner.solvers.solvers.MultiInitSearch
 
@@ -162,8 +163,8 @@ elif demo_type == 2:
 
 elif demo_type == 3:
     # one-dimensional regularization grid search
-    print "Demo 3: one-dimensional grid search to find a minimum on the cross-validation set."
-    print ""
+    print("Demo 3: one-dimensional grid search to find a minimum on the cross-validation set.")
+    print("")
 
     grid_solver = mner.solvers.solvers.GridSearch
 
@@ -178,8 +179,8 @@ elif demo_type == 3:
 
 elif demo_type == 4:
     # multi-dimensional regularization grid search
-    print "Demo 4: multi-dimensional grid search to find a minimum on the cross-validation set."
-    print ""
+    print("Demo 4: multi-dimensional grid search to find a minimum on the cross-validation set.")
+    print("")
 
     grid_solver = mner.solvers.solvers.GridSearch
 
@@ -197,8 +198,8 @@ elif demo_type == 4:
 
 elif demo_type == 5:
     # one-dimensional regularization Bayesian optimization
-    print "Demo 5: one-dimensional Bayesian optimization to find a minimum on the cross-validation set."
-    print ""
+    print("Demo 5: one-dimensional Bayesian optimization to find a minimum on the cross-validation set.")
+    print("")
 
     bayes_solver = mner.solvers.solvers.BayesSearch
 
@@ -212,8 +213,8 @@ elif demo_type == 5:
 
 elif demo_type == 6:
     # multi-dimensional regularization Bayesian optimization
-    print "Demo 6: multi-dimensional Bayesian optimization to find a minimum on the cross-validation set."
-    print ""
+    print("Demo 6: multi-dimensional Bayesian optimization to find a minimum on the cross-validation set.")
+    print("")
 
     bayes_solver = mner.solvers.solvers.BayesSearch
 
@@ -233,8 +234,8 @@ elif demo_type == 6:
 
 elif demo_type == 7:
     # multi-dimensional Bayesian optimization with annealing of the exploration weight
-    print "Demo 7: multi-dimensional Bayesian optimization with annealing of the exploration weight."
-    print ""
+    print("Demo 7: multi-dimensional Bayesian optimization with annealing of the exploration weight.")
+    print("")
 
     bayes_solver = mner.solvers.solvers.BayesSearch
 
@@ -265,8 +266,8 @@ elif demo_type == 7:
 
 elif demo_type == 8:
     # find solution in the globally optimal domain with minimal nuclear-norm regularization
-    print "Demo 8: globally optimal approximation to the global minimum on the training set."
-    print ""
+    print("Demo 8: globally optimal approximation to the global minimum on the training set.")
+    print("")
 
     # greater precision is required for convergence
     factr = 1.0e7
@@ -280,7 +281,7 @@ elif demo_type == 8:
 
 elif demo_type == 9:
     # two-dimensional Bayesian optimization using nuclear-norm and l2-norm regularization
-    print "Demo 9: two-dimensional Bayesian optimization using using nuclear-norm and l2-norm regularization"
+    print("Demo 9: two-dimensional Bayesian optimization using using nuclear-norm and l2-norm regularization")
 
     bayes_solver = mner.solvers.solvers.BayesSearch
 
@@ -302,9 +303,9 @@ elif demo_type == 9:
     # optimize the model
     x, ftrain = opt.optimize()
 
-print "final ftrain = " + str(ftrain)
-print "final fcv = " + str(opt.compute_set("cv"))
-print "final test = " + str(opt.compute_set("test"))
+print("final ftrain = " + str(ftrain))
+print("final fcv = " + str(opt.compute_set("cv")))
+print("final test = " + str(opt.compute_set("test")))
 
 # copy ground truth
 a_GT = np.copy(a)

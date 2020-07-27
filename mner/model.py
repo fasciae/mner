@@ -1,3 +1,4 @@
+from __future__ import print_function
 import numpy as np
 import theano.tensor as T
 import theano
@@ -1920,13 +1921,13 @@ if __name__ == "__main__":
                 else:
                     smsg = str(M[i,j])
                 msg += smsg + "\t"
-            print msg        
+            print(msg)        
 
 
-    print "----------------------------"
-    print "UNIT TESTING"
-    print "----------------------------"
-    print ""
+    print("----------------------------")
+    print("UNIT TESTING")
+    print("----------------------------")
+    print("")
 
     resp = np.array([0.1, 0.5, 0.7, 0.2])
     feat = np.array([[1.0, -1.0, 0.5], [0.5, -0.25, -1.0], [-0.75, 0.75, 1.5], [-2.0, 0.25, -1.0]])
@@ -1964,9 +1965,9 @@ if __name__ == "__main__":
             csigns.append(-1)
     csigns = np.array(csigns)
 
-    print "nuclear-norm regularization parameters:"
-    print reg_params
-    print ""
+    print("nuclear-norm regularization parameters:")
+    print(reg_params)
+    print("")
 
     x = T.vector('x')
     lda = T.vector('lda')
@@ -1982,7 +1983,7 @@ if __name__ == "__main__":
     elif cetype == "UV-inner-product":
         lda_const = np.random.randn(rank).astype(float_dtype)
         
-    print "constructing and compiling functions..."
+    print("constructing and compiling functions...")
     model = MNEr(resp, feat, rank, cetype, citype, rtype, fscale, use_vars, use_consts, float_dtype)
     model.init_csigns(csigns)
     model.cost_expr(x)
@@ -2003,8 +2004,8 @@ if __name__ == "__main__":
 
         model.ceq_hess_expr(x, lda)
         model.compile_ceq_hess(x, lda)
-    print "complete."
-    print ""
+    print("complete.")
+    print("")
 
     #model.init_weights_feas()
     model.init_weights()
@@ -2017,50 +2018,50 @@ if __name__ == "__main__":
     if rtype is not None or len(rtype) > 0:
         for i in range(len(rtype)):
             model.assign_reg_params(rtype[i], reg_params[i])
-    print "cost = "
-    print model.cost(model.x)
-    print ""
-    print "gradient = "
-    print model.grad(model.x)
+    print("cost = ")
+    print(model.cost(model.x))
+    print("")
+    print("gradient = ")
+    print(model.grad(model.x))
     H = model.hess(model.x)
-    print ""
-    print "Hessian = "
+    print("")
+    print("Hessian = ")
     nice_print(H)
 
     if cetype is not None and "UV-linear-insert" not in model.cetype and "UV-linear-insert-relaxed" not in model.cetype and use_vars['UVvar']:
-        print ""
-        print "equality constraints = "
-        print model.ceq(model.x)
-        print ""
-        print "equality constraints Jacobian = "
-        print model.ceq_jacobian(model.x)
-        print ""
-        print "equality constraints Hessian (linear combination weighted by lda) = "
+        print("")
+        print("equality constraints = ")
+        print(model.ceq(model.x))
+        print("")
+        print("equality constraints Jacobian = ")
+        print(model.ceq_jacobian(model.x))
+        print("")
+        print("equality constraints Hessian (linear combination weighted by lda) = ")
         Hce = model.ceq_hess(model.x, lda_const)
         nice_print(Hce)
 
     from scipy.optimize import check_grad
 
-    print ""
-    print "cost gradient checking (norm difference) = "
-    print check_grad(lambda x: model.cost(x.astype(float_dtype)).astype(np.float64), lambda x: model.grad(x.astype(float_dtype)).astype(np.float64), model.x.astype(np.float64), epsilon=np.sqrt(np.finfo(float_dtype).eps))
+    print("")
+    print("cost gradient checking (norm difference) = ")
+    print(check_grad(lambda x: model.cost(x.astype(float_dtype)).astype(np.float64), lambda x: model.grad(x.astype(float_dtype)).astype(np.float64), model.x.astype(np.float64), epsilon=np.sqrt(np.finfo(float_dtype).eps)))
     #print check_grad(model.cost, model.grad, model.x)
 
-    print ""
-    print "cost Hessian checking (norm difference) = "
+    print("")
+    print("cost Hessian checking (norm difference) = ")
     for i in range(H.shape[1]):
-        print "row " + str(i) + ": " + str(check_grad(lambda x: model.grad(x.astype(float_dtype))[i].astype(np.float64), lambda x: model.hess(x.astype(float_dtype))[i, :].astype(np.float64), model.x.astype(np.float64), epsilon=np.sqrt(np.finfo(float_dtype).eps)))
+        print("row " + str(i) + ": " + str(check_grad(lambda x: model.grad(x.astype(float_dtype))[i].astype(np.float64), lambda x: model.hess(x.astype(float_dtype))[i, :].astype(np.float64), model.x.astype(np.float64), epsilon=np.sqrt(np.finfo(float_dtype).eps))))
         #print "row " + str(i) + ": " + str(check_grad(lambda x: model.grad(x)[i], lambda x: model.hess(x)[i, :], model.x))
     
     if cetype is not None and "UV-linear-insert" not in model.cetype and "UV-linear-insert-relaxed" not in model.cetype and use_vars['UVvar']:
-        print ""
-        print "equality constraints Jacobian checking (norm difference) = "
+        print("")
+        print("equality constraints Jacobian checking (norm difference) = ")
         for i in range(model.ceq(model.x).size):
             #print "col " + str(i) + ": " + str(check_grad(lambda x: model.ceq(x.astype(float_dtype))[i].astype(np.float64), lambda x: model.ceq_jacobian(x.astype(float_dtype))[:, i].astype(np.float64), model.x.astype(np.float64)))
-            print "col " + str(i) + ": " + str(check_grad(lambda x: model.ceq(x)[i], lambda x: model.ceq_jacobian(x)[:, i], model.x))
+            print("col " + str(i) + ": " + str(check_grad(lambda x: model.ceq(x)[i], lambda x: model.ceq_jacobian(x)[:, i], model.x)))
 
-        print ""
-        print "equality constraints Hessian checking (norm difference; linear combination weighted by lda) = "
+        print("")
+        print("equality constraints Hessian checking (norm difference; linear combination weighted by lda) = ")
         for i in range(Hce.shape[1]):
             #print "row " + str(i) + ": " + str(check_grad(lambda x: np.dot(model.ceq_jacobian(x), lda_const)[i], lambda x: model.ceq_hess(x, lda_const)[i, :], model.x))
-            print "row " + str(i) + ": " + str(check_grad(lambda x: np.dot(model.ceq_jacobian(x), lda_const)[i], lambda x: model.ceq_hess(x, lda_const)[i, :], model.x))
+            print("row " + str(i) + ": " + str(check_grad(lambda x: np.dot(model.ceq_jacobian(x), lda_const)[i], lambda x: model.ceq_hess(x, lda_const)[i, :], model.x)))
